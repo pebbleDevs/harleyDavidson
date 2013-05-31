@@ -11,6 +11,8 @@ PBL_APP_INFO(MY_UUID,
              DEFAULT_MENU_ICON,
              APP_INFO_WATCH_FACE);
 
+
+// GLOBAL DECLARATION //
 Window window;
 //Bitmap area for logo
 BmpContainer background_image;
@@ -19,11 +21,17 @@ Layer background_layer;
 TextLayer text_time_layer;
 TextLayer text_date_layer;
 TextLayer text_month_layer;
+TextLayer text_day_layer;
 
 GFont font_gunplay;
 
 TextLayer text_creditLine1_layer;
 TextLayer text_creditLine2_layer;
+TextLayer text_versionInfo_layer;
+
+//////////////////////////////////////
+////// CUSTOM FUNCTIONS //////////////
+/////////////////////////////////////
 
 char* get_short_month(char *month_text)
 {
@@ -81,12 +89,13 @@ char* get_short_month(char *month_text)
 		{
 			return short_month_text = "N/A";
 		 }
-	//text_layer_set_text(&text_month_layer, short_month_text);
+	
 
 }
 
 void creditBanner()
 {
+ 
  //initilizing the creditline layer
   text_layer_init(&text_creditLine1_layer, window.layer.frame);
   //setting the layer attributes
@@ -94,12 +103,12 @@ void creditBanner()
   text_layer_set_background_color(&text_creditLine1_layer, GColorClear);
   //positing attributes
   text_layer_set_text_alignment(&text_creditLine1_layer, GTextAlignmentCenter);
-  layer_set_frame(&text_creditLine1_layer.layer, GRect(0,100,144,120));
+  layer_set_frame(&text_creditLine1_layer.layer, GRect(0,95,144,30)); //GRect(X,Y, Width, Height)
   //Font attribute
   //gunplay_40 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_GUNPLAY_40));
   text_layer_set_font(&text_creditLine1_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
   layer_add_child(&window.layer, &text_creditLine1_layer.layer);
-  text_layer_set_text(&text_creditLine1_layer,"Created By");
+  text_layer_set_text(&text_creditLine1_layer,"Developed By");
   
   //initilizing the layer  
   text_layer_init(&text_creditLine2_layer, window.layer.frame);
@@ -108,14 +117,30 @@ void creditBanner()
   text_layer_set_background_color(&text_creditLine2_layer, GColorClear);
   //positiong attribute
   text_layer_set_text_alignment(&text_creditLine2_layer, GTextAlignmentCenter);
-  layer_set_frame(&text_creditLine2_layer.layer, GRect(0,120,144,130));
+  layer_set_frame(&text_creditLine2_layer.layer, GRect(0,115,144,30));
   //Font attribute
   //gunplay_40 = fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD);
   text_layer_set_font(&text_creditLine2_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
   layer_add_child(&window.layer, &text_creditLine2_layer.layer);
   text_layer_set_text(&text_creditLine2_layer,"alokc83");
+  
+      //initilizing the text_versionInfo_layer  
+  text_layer_init(&text_versionInfo_layer, window.layer.frame);
+  //setting the layer attributes 
+  text_layer_set_text_color(&text_versionInfo_layer, GColorBlack);
+  text_layer_set_background_color(&text_versionInfo_layer, GColorClear);
+  //positiong attribute
+  text_layer_set_text_alignment(&text_versionInfo_layer, GTextAlignmentLeft);
+  layer_set_frame(&text_versionInfo_layer.layer, GRect(55,140,60,20));
+  //Font attribute
+  text_layer_set_font(&text_versionInfo_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  layer_add_child(&window.layer, &text_versionInfo_layer.layer);
+  text_layer_set_text(&text_versionInfo_layer, "v1.0");
 }
 
+/////////////////////////////////////////////////
+///////// END OF CUSTOM FUNCTIONS///////////////
+////////////////////////////////////////////////
 
 void handle_init(AppContextRef ctx) {
   (void)ctx;
@@ -130,7 +155,7 @@ void handle_init(AppContextRef ctx) {
   // gfx layer init 
   layer_init(&background_layer, window.layer.frame);
   bmp_init_container(RESOURCE_ID_BAR_SHIELD_BOW, &background_image);
-  layer_set_frame(&background_image.layer.layer, GRect(2,-3,140,115));
+  layer_set_frame(&background_image.layer.layer, GRect(1,0,144,105));
   layer_add_child(&window.layer, &background_image.layer.layer);
 
  
@@ -139,29 +164,59 @@ void handle_init(AppContextRef ctx) {
   text_layer_set_text_color(&text_time_layer, GColorBlack);
   text_layer_set_background_color(&text_time_layer, GColorClear);
   text_layer_set_text_alignment(&text_time_layer, GTextAlignmentCenter);
-  layer_set_frame(&text_time_layer.layer, GRect(0,102,144,112));
+  layer_set_frame(&text_time_layer.layer, GRect(0,100,144,80));
   //Font atterbutes
   font_gunplay = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_GUNPLAY_42));
   //gunplay_40 = fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD);
   text_layer_set_font(&text_time_layer, font_gunplay);
   layer_add_child(&window.layer, &text_time_layer.layer);
   
+  //initilizing the day of week layer  
+  //text_layer_init(&text_day_layer, window.layer.frame);
+ //layer_set_frame(&text_day_layer.layer, GRect(10,143,30,148));
+  text_layer_init(&text_day_layer, GRect(5,143,40,20));
+  //setting the layer attributes 
+  text_layer_set_text_color(&text_day_layer, GColorBlack);
+  text_layer_set_background_color(&text_day_layer, GColorClear);
+  //positiong attribute
+  text_layer_set_text_alignment(&text_day_layer, GTextAlignmentLeft);
+  //Font attribute
+  text_layer_set_font(&text_day_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  layer_add_child(&window.layer, &text_day_layer.layer);
+
   //initilizing the Month layer  
-  text_layer_init(&text_month_layer, window.layer.frame);
+  //text_layer_init(&text_month_layer, window.layer.frame);
+ //layer_set_frame(&text_month_layer.layer, GRect(10,143,30,148));
+  text_layer_init(&text_month_layer, GRect(30,143,40,20));
   //setting the layer attributes 
   text_layer_set_text_color(&text_month_layer, GColorBlack);
   text_layer_set_background_color(&text_month_layer, GColorClear);
   //positiong attribute
   text_layer_set_text_alignment(&text_month_layer, GTextAlignmentLeft);
-  layer_set_frame(&text_month_layer.layer, GRect(10,143,30,148));
   //Font attribute
   text_layer_set_font(&text_month_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
   layer_add_child(&window.layer, &text_month_layer.layer);
   
+  
+  //initilizing the date layer  
+  //text_layer_init(&text_date_layer, window.layer.frame);
+  //layer_set_frame(&text_date_layer.layer, GRect(60,143,65,148));
+  //instead of above two line line below can be used.
+  text_layer_init(&text_date_layer, GRect(60,143,20,20));
+  //setting the layer attributes 
+  text_layer_set_text_color(&text_date_layer, GColorBlack);
+  text_layer_set_background_color(&text_date_layer, GColorClear);
+  //positiong attribute
+  text_layer_set_text_alignment(&text_date_layer, GTextAlignmentCenter);
+  
+  //Font attribute
+  text_layer_set_font(&text_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  layer_add_child(&window.layer, &text_date_layer.layer);
+  
   creditBanner();
   
-  //PblTm tick_time;
-  //get_time(&tick_time);
+  PblTm tick_time;
+  get_time(&tick_time);
 }
 
 void handle_minute_tick(AppContextRef ctx, PebbleTickEvent *t) {
@@ -169,7 +224,12 @@ void handle_minute_tick(AppContextRef ctx, PebbleTickEvent *t) {
   (void)ctx;
   
   static char time_text[] = "00:00";
+  static char day_text[] = "XX";
+  static char new_day_text[] = "YY";
   static char long_month_text[] = "Xxxxxx";
+  static char date_text[] = "XX";
+  static char new_date_text[] = "00";
+  
   char *time_format; // TODO for 12 or 24 hrs suuport
   PblTm current_time;
   get_time(&current_time);
@@ -183,6 +243,7 @@ void handle_minute_tick(AppContextRef ctx, PebbleTickEvent *t) {
  psleep(1000);
  layer_set_hidden((Layer *)&text_creditLine1_layer, true);
  layer_set_hidden((Layer *)&text_creditLine2_layer, true);
+ layer_set_hidden((Layer *)&text_versionInfo_layer, true);
  
  string_format_time(time_text, sizeof(time_text), time_format, &current_time);
 /* if (!clock_is_24h_style() && (time_text[0] == '0')) 
@@ -192,9 +253,27 @@ void handle_minute_tick(AppContextRef ctx, PebbleTickEvent *t) {
 
 text_layer_set_text(&text_time_layer, time_text);
 
+//populating day layer
+//Not pupulating unless day is different
+  string_format_time(new_day_text,sizeof(date_text), "%A", &current_time);
+  if(strncmp(new_day_text, day_text, sizeof(day_text)) != 0)
+  	{
+  		strncpy(day_text, new_day_text, sizeof(day_text));
+  		text_layer_set_text(&text_day_layer, day_text);
+  	}
 //populating month layer
  string_format_time(long_month_text, sizeof(long_month_text), "%B", &current_time);
-text_layer_set_text(&text_month_layer, get_short_month(long_month_text));
+//text_layer_set_text(&text_month_layer, get_short_month(long_month_text));
+text_layer_set_text(&text_month_layer, long_month_text);
+
+//populating date field 
+//Not pupulating unless date is different
+  string_format_time(new_date_text,sizeof(date_text), "%e", &current_time);
+  if(strncmp(new_date_text, date_text, sizeof(date_text)) != 0)
+  	{
+  		strncpy(date_text, new_date_text, sizeof(date_text));
+  		text_layer_set_text(&text_date_layer, date_text);
+  	}
 
 }
 
