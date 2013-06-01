@@ -3,7 +3,7 @@
 #include "pebble_fonts.h"
 //#include "myPebbleFunctions.h"
 
-
+// MACRO SECTION
 #define MY_UUID { 0xD6, 0x66, 0xC2, 0x7E, 0xE6, 0x5C, 0x46, 0x55, 0x81, 0x5F, 0xB4, 0x58, 0xD9, 0x47, 0xBD, 0x9B }
 PBL_APP_INFO(MY_UUID,
              "Harley Davidson 1", "mApps Lab",
@@ -11,6 +11,8 @@ PBL_APP_INFO(MY_UUID,
              DEFAULT_MENU_ICON,
              APP_INFO_WATCH_FACE);
 
+#define IMG1 1; 
+#define IMG2 2;
 
 // GLOBAL DECLARATION //
 Window window;
@@ -19,6 +21,7 @@ BmpContainer background_image;
 Layer background_layer;
 
 TextLayer text_time_layer;
+TextLayer text_ampm_layer;
 TextLayer text_date_layer;
 TextLayer text_month_layer;
 TextLayer text_day_layer;
@@ -32,66 +35,6 @@ TextLayer text_versionInfo_layer;
 //////////////////////////////////////
 ////// CUSTOM FUNCTIONS //////////////
 /////////////////////////////////////
-
-char* get_short_month(char *month_text)
-{
-  // Month Logic 
-	char *short_month_text;
-	if(strncmp(month_text, "January", sizeof(month_text)) == 0)
-		{
-			return short_month_text = "JAN";
-		}
-	else if(strncmp(month_text, "February", sizeof(month_text)) == 0)
-		{
-			return short_month_text = "FEB";
-		}
-	else if(strncmp(month_text, "March", sizeof(month_text)) == 0)
-		{
-			return short_month_text = "MAR";
-		}
-	else if(strncmp(month_text, "April", sizeof(month_text)) == 0)
-		{
-			return short_month_text = "APR";
-		}
-	else if(strncmp(month_text, "May", sizeof(month_text)) == 0)
-		{
-			return short_month_text = "MAY";
-		}
-	else if(strncmp(month_text, "June", sizeof(month_text)) == 0)
-		{
-			return short_month_text = "JUN";
-		}
-	else if(strncmp(month_text, "July", sizeof(month_text)) == 0)
-		{
-			return short_month_text = "JUL";
-		}
-	else if(strncmp(month_text, "August", sizeof(month_text)) == 0)
-		{
-			return short_month_text = "AUG";
-		}
-	else if(strncmp(month_text, "September", sizeof(month_text)) == 0)
-		{
-			return short_month_text = "SEP";
-		}
-	else if(strncmp(month_text, "October", sizeof(month_text)) == 0)
-		{
-			return short_month_text = "OCT";
-		}
-	else if(strncmp(month_text, "November", sizeof(month_text)) == 0)
-		{
-			return short_month_text = "NOV";
-		}
-	else if(strncmp(month_text, "December", sizeof(month_text)) == 0)
-		{
-			return short_month_text = "DEC";
-		}
-	else
-		{
-			return short_month_text = "N/A";
-		 }
-	
-
-}
 
 void creditBanner()
 {
@@ -153,7 +96,7 @@ void handle_init(AppContextRef ctx) {
   resource_init_current_app(&APP_RESOURCES);
   
   // gfx layer init 
-  layer_init(&background_layer, window.layer.frame);
+  layer_init(&background_layer, window.layer.frame); //TODO another logo
   bmp_init_container(RESOURCE_ID_BAR_SHIELD_BOW, &background_image);
   layer_set_frame(&background_image.layer.layer, GRect(1,0,144,105));
   layer_add_child(&window.layer, &background_image.layer.layer);
@@ -171,10 +114,23 @@ void handle_init(AppContextRef ctx) {
   text_layer_set_font(&text_time_layer, font_gunplay);
   layer_add_child(&window.layer, &text_time_layer.layer);
   
+  //initilizing the AM_PM layer  
+  text_layer_init(&text_ampm_layer, GRect(116,88,25,20));
+  //text_layer_init(&text_ampm_layer, GRect(60,45,25,20));
+  //setting the layer attributes 
+  text_layer_set_text_color(&text_ampm_layer, GColorBlack);
+  text_layer_set_background_color(&text_ampm_layer, GColorClear);
+  //positiong attribute
+  text_layer_set_text_alignment(&text_ampm_layer, GTextAlignmentRight);  
+  //Font attribute
+  text_layer_set_font(&text_ampm_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  layer_add_child(&window.layer, &text_ampm_layer.layer);
+
+  
   //initilizing the day of week layer  
   //text_layer_init(&text_day_layer, window.layer.frame);
  //layer_set_frame(&text_day_layer.layer, GRect(10,143,30,148));
-  text_layer_init(&text_day_layer, GRect(5,143,40,20));
+  text_layer_init(&text_day_layer, GRect(5,143,30,20));
   //setting the layer attributes 
   text_layer_set_text_color(&text_day_layer, GColorBlack);
   text_layer_set_background_color(&text_day_layer, GColorClear);
@@ -187,12 +143,12 @@ void handle_init(AppContextRef ctx) {
   //initilizing the Month layer  
   //text_layer_init(&text_month_layer, window.layer.frame);
  //layer_set_frame(&text_month_layer.layer, GRect(10,143,30,148));
-  text_layer_init(&text_month_layer, GRect(30,143,40,20));
+  text_layer_init(&text_month_layer, GRect(98,143,25,20));
   //setting the layer attributes 
   text_layer_set_text_color(&text_month_layer, GColorBlack);
   text_layer_set_background_color(&text_month_layer, GColorClear);
   //positiong attribute
-  text_layer_set_text_alignment(&text_month_layer, GTextAlignmentLeft);
+  text_layer_set_text_alignment(&text_month_layer, GTextAlignmentRight);
   //Font attribute
   text_layer_set_font(&text_month_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
   layer_add_child(&window.layer, &text_month_layer.layer);
@@ -202,12 +158,12 @@ void handle_init(AppContextRef ctx) {
   //text_layer_init(&text_date_layer, window.layer.frame);
   //layer_set_frame(&text_date_layer.layer, GRect(60,143,65,148));
   //instead of above two line line below can be used.
-  text_layer_init(&text_date_layer, GRect(60,143,20,20));
+  text_layer_init(&text_date_layer, GRect(125,143,16,20));
   //setting the layer attributes 
   text_layer_set_text_color(&text_date_layer, GColorBlack);
   text_layer_set_background_color(&text_date_layer, GColorClear);
   //positiong attribute
-  text_layer_set_text_alignment(&text_date_layer, GTextAlignmentCenter);
+  text_layer_set_text_alignment(&text_date_layer, GTextAlignmentRight);
   
   //Font attribute
   text_layer_set_font(&text_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
@@ -215,8 +171,8 @@ void handle_init(AppContextRef ctx) {
   
   creditBanner();
   
-  PblTm tick_time;
-  get_time(&tick_time);
+ // PblTm tick_time;
+  //get_time(&tick_time);
 }
 
 void handle_minute_tick(AppContextRef ctx, PebbleTickEvent *t) {
@@ -224,26 +180,31 @@ void handle_minute_tick(AppContextRef ctx, PebbleTickEvent *t) {
   (void)ctx;
   
   static char time_text[] = "00:00";
-  static char day_text[] = "XX";
-  static char new_day_text[] = "YY";
-  static char long_month_text[] = "Xxxxxx";
+  static char ampm_text[] = "XX";
+  static char day_text[] = "XXX";
+  static char new_day_text[] = "YYY";
+  static char month_text[] = "XXX";
   static char date_text[] = "XX";
   static char new_date_text[] = "00";
   
-  char *time_format; // TODO for 12 or 24 hrs suuport
+  char *time_format; // TODO for 12 or 24 hrs support
   PblTm current_time;
   get_time(&current_time);
-  if (clock_is_24h_style()) {
-    time_format = "%R";
-  } else {
-    time_format = "%I:%M";
-  }
  
  // Hiding the credit line layers
  psleep(1000);
  layer_set_hidden((Layer *)&text_creditLine1_layer, true);
  layer_set_hidden((Layer *)&text_creditLine2_layer, true);
  layer_set_hidden((Layer *)&text_versionInfo_layer, true);
+ 
+ if (clock_is_24h_style()) {
+    time_format = "%R";
+  } else {
+    time_format = "%I:%M";
+    //setting am or pm 
+    string_format_time(ampm_text,sizeof(ampm_text), "%p", &current_time);
+    text_layer_set_text(&text_ampm_layer, ampm_text);
+  }
  
  string_format_time(time_text, sizeof(time_text), time_format, &current_time);
 /* if (!clock_is_24h_style() && (time_text[0] == '0')) 
@@ -255,20 +216,19 @@ text_layer_set_text(&text_time_layer, time_text);
 
 //populating day layer
 //Not pupulating unless day is different
-  string_format_time(new_day_text,sizeof(date_text), "%A", &current_time);
+  string_format_time(new_day_text,sizeof(day_text), "%a", &current_time);
   if(strncmp(new_day_text, day_text, sizeof(day_text)) != 0)
   	{
   		strncpy(day_text, new_day_text, sizeof(day_text));
   		text_layer_set_text(&text_day_layer, day_text);
   	}
-//populating month layer
- string_format_time(long_month_text, sizeof(long_month_text), "%B", &current_time);
-//text_layer_set_text(&text_month_layer, get_short_month(long_month_text));
-text_layer_set_text(&text_month_layer, long_month_text);
+//populating month layer %b=Jun, %B = June
+ string_format_time(month_text, sizeof(month_text), "%b", &current_time);
+text_layer_set_text(&text_month_layer, month_text);
 
 //populating date field 
 //Not pupulating unless date is different
-  string_format_time(new_date_text,sizeof(date_text), "%e", &current_time);
+  string_format_time(new_date_text,sizeof(date_text), "%d", &current_time);
   if(strncmp(new_date_text, date_text, sizeof(date_text)) != 0)
   	{
   		strncpy(date_text, new_date_text, sizeof(date_text));
