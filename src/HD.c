@@ -240,11 +240,12 @@ text_layer_set_text(&text_month_layer, month_text);
 //dealloccation when watchface is close
 void handle_deinit(AppContextRef ctx) {
         (void)ctx;
-
+      vibes_short_pulse();
       bmp_deinit_container(&background_image);
       fonts_unload_custom_font(font_gunplay);
       //  fonts_unload_custom_font(batman_letters_20);
      //   fonts_unload_custom_font(batman_numbers_40);
+     
 }
 
 
@@ -259,6 +260,7 @@ void pbl_main(void *params) {
 void pbl_main(void *params) {
   PebbleAppHandlers handlers = {
     .init_handler = &handle_init,
+    .deinit_handler = &handle_deinit,
 
     .tick_info = {
       .tick_handler = &handle_minute_tick,
