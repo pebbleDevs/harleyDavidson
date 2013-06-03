@@ -8,7 +8,7 @@
 PBL_APP_INFO(MY_UUID,
              "Harley Davidson 1", "mApps Lab",
              1, 0, /* App version */
-             DEFAULT_MENU_ICON,
+             RESOURCE_ID_IMAGE_MENU_ICON,
              APP_INFO_WATCH_FACE);
 
 #define IMG1 1; 
