@@ -8,10 +8,15 @@
         "location"
     ],
     "companyName": "alokc83",
-    "longName": "tutorial1",
+    "longName": "HD Logo BarShield",
     "projectType": "native",
     "resources": {
         "media": [
+            {
+                "file": "images/menu_icon.png",
+                "name": "IMAGE_MENU_ICON",
+                "type": "png"
+            },
             {
                 "characterRegex": "[a-zA-z,:/. 0-9]",
                 "file": "fonts/KeepCalm-Medium.ttf",
@@ -32,7 +37,7 @@
         ]
     },
     "sdkVersion": "3",
-    "shortName": "tutorial1",
+    "shortName": "HDBarShield",
     "targetPlatforms": [
         "aplite"
     ],
