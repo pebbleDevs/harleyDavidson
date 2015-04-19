@@ -4,7 +4,8 @@
 #define KEY_TEMPERATURE_C 0
 #define KEY_TEMPERATURE_F 1
 #define KEY_CONDITIONS 2
-
+#define UPDATECYCLE 30
+	
 //static pointers
 static Window *s_main_window;
 
@@ -85,7 +86,7 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 	update_time();
 	
 	//get weather update every 30 minutes
-	if(tick_time->tm_min % 1 == 0){
+	if(tick_time->tm_min % UPDATECYCLE == 0){
 		//begin dictonary
 		DictionaryIterator *iter;
 		app_message_outbox_begin(&iter);
