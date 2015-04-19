@@ -28,19 +28,20 @@ static void main_window_load(Window *window){
 	//image section
 	//it must be fraw first to be in the background
 	s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BAR_AND_SHIELD_LOGO);
-	s_background_layer = bitmap_layer_create(GRect(3,10,138,105));
+	s_background_layer = bitmap_layer_create(GRect(3,20,138,105));
 	bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
 	layer_add_child(window_get_root_layer(window), bitmap_layer_get_layer(s_background_layer
 																		 ));
 	//Create Time text Layer
-	s_time_layer = text_layer_create(GRect(5,105,139,50));
+	s_time_layer = text_layer_create(GRect(5,115,139,50));
 	text_layer_set_background_color(s_time_layer, GColorClear);
 	text_layer_set_text_color(s_time_layer, GColorBlack);
 	text_layer_set_text(s_time_layer, "00:00");
 	
 	//imporove the layout to be more like watchface
 	// Create GFont
-	s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_VIKINGS_SUBSET_40));
+	//s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_VIKINGS_SUBSET_40));
+	s_time_font = fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD);
 	// Apply to TextLayer
 	text_layer_set_font(s_time_layer, s_time_font);
 	text_layer_set_text_alignment(s_time_layer,GTextAlignmentCenter);
@@ -49,15 +50,15 @@ static void main_window_load(Window *window){
 	layer_add_child(window_get_root_layer(window),text_layer_get_layer(s_time_layer));
 	
 	//create weather layer
-	s_weather_layer = text_layer_create(GRect(0, 150, 144, 25));
+	s_weather_layer = text_layer_create(GRect(0, 0, 144, 25));
 	text_layer_set_background_color(s_weather_layer, GColorClear);
 	text_layer_set_text_color(s_weather_layer, GColorBlack);
 	text_layer_set_text_alignment(s_weather_layer, GTextAlignmentCenter);
 	text_layer_set_text(s_weather_layer, "Loading ...");
 	
 	//loading weather font
-	s_weather_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_KEEP_CALM_SUBSET_10));
-	text_layer_set_font(s_weather_layer, s_weather_font);
+	//s_weather_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_KEEP_CALM_SUBSET_10));
+	s_weather_font = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_weather_layer));
 					
 }
@@ -77,7 +78,6 @@ static void main_window_unload(Window *window){
 	//destroy weather layer and font
 	text_layer_destroy(s_weather_layer);
 	fonts_unload_custom_font(s_weather_font);
-
 }
 
 //subscribe to tickService
