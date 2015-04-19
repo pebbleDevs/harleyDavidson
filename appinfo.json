@@ -1,0 +1,45 @@
+{
+    "appKeys": {
+        "KEY_CONDITIONS": 2,
+        "KEY_TEMPERATURE_C": 0,
+        "KEY_TEMPERATURE_F": 1
+    },
+    "capabilities": [
+        "location"
+    ],
+    "companyName": "alokc83",
+    "longName": "tutorial1",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "characterRegex": "[a-zA-z,:/. 0-9]",
+                "file": "fonts/KeepCalm-Medium.ttf",
+                "name": "FONT_KEEP_CALM_SUBSET_10",
+                "type": "font"
+            },
+            {
+                "file": "images/barNShield.png",
+                "name": "IMAGE_BAR_AND_SHIELD_LOGO",
+                "type": "png"
+            },
+            {
+                "characterRegex": "[0-9:.]",
+                "file": "fonts/VIKING-N.TTF",
+                "name": "FONT_VIKINGS_SUBSET_40",
+                "type": "font"
+            }
+        ]
+    },
+    "sdkVersion": "3",
+    "shortName": "tutorial1",
+    "targetPlatforms": [
+        "aplite"
+    ],
+    "uuid": "4dc6bc76-dc2a-4af4-982c-666f624c1a5d",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
