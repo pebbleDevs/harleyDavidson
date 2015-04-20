@@ -18,12 +18,6 @@
                 "type": "png"
             },
             {
-                "characterRegex": "[a-zA-z,:/. 0-9]",
-                "file": "fonts/KeepCalm-Medium.ttf",
-                "name": "FONT_KEEP_CALM_SUBSET_10",
-                "type": "font"
-            },
-            {
                 "file": "images/barNShield.png",
                 "name": "IMAGE_BAR_AND_SHIELD_LOGO",
                 "type": "png"

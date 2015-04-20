@@ -1,4 +1,5 @@
 #include <pebble.h>
+#include "MTPebbleFunctions.h"
 	
 // Dictionary keys to send data between the Pebble and the phone.  
 #define KEY_TEMPERATURE_C 0
@@ -21,11 +22,19 @@ static GFont s_weather_font;
 static BitmapLayer *s_background_layer;
 static GBitmap *s_background_bitmap;
 
+//Charge layer 
+static TextLayer *s_charge_layer;
+
+
 //static fucntions
 static void update_time();
 
 //window handler functions
 static void main_window_load(Window *window){
+	//get root window
+	//struct Layer * window_get_root_layer(const Window * window)
+	struct Layer* rootWindow = window_get_root_layer(window);
+	
 	//image section
 	//it must be fraw first to be in the background
 	s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BAR_AND_SHIELD_LOGO);
@@ -61,7 +70,15 @@ static void main_window_load(Window *window){
 	//s_weather_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_KEEP_CALM_SUBSET_10));
 	s_weather_font = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_weather_layer));
-					
+	
+	//Charge layer
+	//s_charge_layer = text_layer_create();
+	//text_layer_set_background_color(s_charge_layer, GColorClear);
+	//text_layer_set_text_color
+	//come here 	
+	APP_LOG(APP_LOG_LEVEL_INFO, "LibFunc called %d", libFunc(9));
+	s_charge_layer = textLayerWithAttributes(s_charge_layer,GRect(110,108,35,25) ,GColorClear, GColorBlack, "100%");
+	layer_add_child(rootWindow, text_layer_get_layer(s_charge_layer));
 }
 
 static void main_window_unload(Window *window){
@@ -79,9 +96,24 @@ static void main_window_unload(Window *window){
 	//destroy weather layer and font
 	text_layer_destroy(s_weather_layer);
 	fonts_unload_custom_font(s_weather_font);
+	
+	text_layer_destroy(s_charge_layer);
 }
 
-//subscribe to tickService
+//battery handler
+static void battery_handler(BatteryChargeState charge_state){
+	static char battery_text[] = "100%";
+	
+	if(charge_state.is_charging){
+		snprintf(battery_text, sizeof(battery_text), "Charging");
+	}
+	else{
+		snprintf(battery_text, sizeof(battery_text), "%d%%", charge_state.charge_percent);
+	}
+	text_layer_set_text(s_charge_layer, battery_text);
+}
+
+//Tick Handler in Min
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 	update_time();
 	
@@ -96,6 +128,11 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 		
 		//send the message
 		app_message_outbox_send();
+	}
+	
+	//check battery State in every five mins
+	if(tick_time->tm_min % 5 == 0){
+		battery_handler(battery_state_service_peek());
 	}
 }
 
@@ -205,6 +242,9 @@ static void init(){
 static void deinit(){
 	//destrory window
 	window_destroy(s_main_window);
+	
+	//unsubscribe from tick service
+	tick_timer_service_unsubscribe();
 
 }
 
