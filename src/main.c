@@ -6,6 +6,7 @@
 #define KEY_TEMPERATURE_F 1
 #define KEY_CONDITIONS 2
 #define UPDATECYCLE 30
+#define chargingBarWidth 100
 	
 //static pointers
 static Window *s_main_window;
@@ -25,9 +26,9 @@ static GBitmap *s_background_bitmap;
 //Charge layer 
 static TextLayer *s_charge_layer;
 
-
 //static fucntions
 static void update_time();
+void showChargingProgress(int currentCharge);
 
 //window handler functions
 static void main_window_load(Window *window){
@@ -79,6 +80,7 @@ static void main_window_load(Window *window){
 	APP_LOG(APP_LOG_LEVEL_INFO, "LibFunc called %d", libFunc(9));
 	s_charge_layer = textLayerWithAttributes(s_charge_layer,GRect(110,108,35,25) ,GColorClear, GColorBlack, "100%");
 	layer_add_child(rootWindow, text_layer_get_layer(s_charge_layer));
+	
 }
 
 static void main_window_unload(Window *window){
@@ -106,6 +108,7 @@ static void battery_handler(BatteryChargeState charge_state){
 	
 	if(charge_state.is_charging){
 		snprintf(battery_text, sizeof(battery_text), "Charging");
+		
 	}
 	else{
 		snprintf(battery_text, sizeof(battery_text), "%d%%", charge_state.charge_percent);
@@ -115,6 +118,7 @@ static void battery_handler(BatteryChargeState charge_state){
 
 //Tick Handler in Min
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed){
+	//tick handler
 	update_time();
 	
 	//get weather update every 30 minutes
@@ -208,9 +212,31 @@ static void outbox_sent_callback(DictionaryIterator *iterator, void *context){
 	APP_LOG(APP_LOG_LEVEL_ERROR, "Outbox send success");
 }
 
+//Click of buttons 
+static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
+  //do nothing
+}
+
+static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
+  //do nothing
+}
+
+static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
+  //do nothing
+}
+
+static void click_config_provider(void *context) {
+  window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
+  window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
+  window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
+}
+
 static void init(){
 	//create main wondow element and assign to pointer 
 	s_main_window = window_create();
+	
+	//button configuration
+	window_set_click_config_provider(s_main_window, click_config_provider);
 	
 	//set handlers to manage the element inside the window
 	window_set_window_handlers(s_main_window, (WindowHandlers){
@@ -220,6 +246,8 @@ static void init(){
 	
 		//register with TickTimerService
 	tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+	//tick_timer_service_subscribe(SECOND_UNIT, tick_second_handler);
+	
 	
 	//register callbacls 
 	app_message_register_inbox_received(inbox_received_callback);
@@ -236,12 +264,17 @@ static void init(){
 	
 	//update time layer as soon as window is pushed 
 	update_time();
+	
+	//update battery state 
+	battery_handler(battery_state_service_peek());
 
 }
 
 static void deinit(){
 	//destrory window
 	window_destroy(s_main_window);
+	
+	//destrory all text layers
 	
 	//unsubscribe from tick service
 	tick_timer_service_unsubscribe();

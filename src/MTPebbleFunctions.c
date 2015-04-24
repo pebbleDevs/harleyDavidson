@@ -8,7 +8,11 @@ int libFunc(int justInt){
 	return justInt;
 }
 
-TextLayer* textLayerWithAttributes(TextLayer *textLayer, GRect layerRect, GColor bgColor, GColor textColor, char initialText[]){
+TextLayer* textLayerWithAttributes(TextLayer *textLayer, 
+								   GRect layerRect, 
+								   GColor bgColor, 
+								   GColor textColor, 
+								   char initialText[]){
 	//Create Time text Layer
 	textLayer = text_layer_create(layerRect);
 	text_layer_set_background_color(textLayer, bgColor);
