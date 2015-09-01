@@ -1,16 +1,16 @@
-# project  configured on Sun Apr 19 12:37:43 2015 by
+# project  configured on Thu Apr 23 22:33:53 2015 by
 # waf 1.7.11 (abi 98, python 20706f0 on darwin)
-# using /Users/alokchoudhary/pebble-dev/PebbleSDK-3.0-dp7/Pebble/waf configure build
+# using /Users/alokchoudhary/pebble-dev/PebbleSDK-3.0-dp8/Pebble/waf configure build
 #
 ----------------------------------------
 Setting top to
-/Users/alokchoudhary/Documents/pebble_projects/convertTo3.0/harleyDavidson
+/Users/alokchoudhary/Documents/pebble_projects/harleyDavidson
 ----------------------------------------
 Setting out to
-/Users/alokchoudhary/Documents/pebble_projects/convertTo3.0/harleyDavidson/build
+/Users/alokchoudhary/Documents/pebble_projects/harleyDavidson/build
 ----------------------------------------
 Found Pebble SDK for aplite in:
-/Users/alokchoudhary/pebble-dev/PebbleSDK-3.0-dp7/Pebble/aplite
+/Users/alokchoudhary/pebble-dev/PebbleSDK-3.0-dp8/Pebble/aplite
 ----------------------------------------
 Checking for program gcc,cc
 arm-none-eabi-gcc
